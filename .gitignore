@@ -24,3 +24,7 @@ Thumbs.db
 
 # === Docker local data (if mounted) ===
 data/
+
+# === Postman ===
+*.postman_collection.json
+*.postman_environment.json
