@@ -1,0 +1,26 @@
+# === Secrets ===
+.env
+.env.*
+!.env.example
+
+# === SSL certificates ===
+reverse-proxy/ssl/*.pem
+reverse-proxy/ssl/*.key
+reverse-proxy/ssl/*.crt
+
+# === Backups ===
+backups/
+
+# === OS ===
+.DS_Store
+Thumbs.db
+
+# === IDE ===
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# === Docker local data (if mounted) ===
+data/

@@ -1,0 +1,92 @@
+# =============================================================================
+# medique-hostedui — Production Docker Compose
+# =============================================================================
+# Usage:
+#   docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+#
+# This file OVERRIDES docker-compose.yml for production:
+#   - Adds Nginx reverse proxy with SSL
+#   - Adds PostgreSQL with pgvector
+#   - Removes direct port exposure on Open WebUI
+#   - Uses internal Docker network for database
+# =============================================================================
+
+services:
+  # --- Override: remove published port, connect to PostgreSQL ---
+  open-webui:
+    ports: !override []
+    expose:
+      - "8080"
+    environment:
+      # --- OpenAI Provider ---
+      - OPENAI_API_KEY=${OPENAI_API_KEY:?Set OPENAI_API_KEY in .env}
+      - OPENAI_API_BASE_URL=${OPENAI_API_BASE_URL:-https://api.openai.com/v1}
+      - ENABLE_OPENAI_API=true
+      - ENABLE_OLLAMA_API=false
+      # --- Security (hardened for production) ---
+      - WEBUI_AUTH=true
+      - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY:?Set WEBUI_SECRET_KEY in .env}
+      - ENABLE_SIGNUP=false
+      # --- RAG ---
+      - ENABLE_RAG_WEB_SEARCH=false
+      - RAG_EMBEDDING_ENGINE=${RAG_EMBEDDING_ENGINE:-openai}
+      - RAG_EMBEDDING_MODEL=${RAG_EMBEDDING_MODEL:-text-embedding-3-small}
+      - ENABLE_SEARCH_QUERY=false
+      # --- UI ---
+      - WEBUI_NAME=${WEBUI_NAME:-Medique - Tutor Educacional}
+      - DEFAULT_MODELS=${DEFAULT_MODELS:-gpt-4o-mini}
+      # --- Database ---
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-medique}:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}@postgres:5432/${POSTGRES_DB:-medique}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - frontend
+      - backend
+
+  # --- Nginx reverse proxy (SSL termination) ---
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: medique-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./reverse-proxy/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./reverse-proxy/ssl:/etc/nginx/ssl:ro
+    depends_on:
+      open-webui:
+        condition: service_healthy
+    networks:
+      - frontend
+    restart: unless-stopped
+
+  # --- PostgreSQL with pgvector ---
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: medique-postgres
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER:-medique}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+      - POSTGRES_DB=${POSTGRES_DB:-medique}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-medique}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - backend
+    restart: unless-stopped
+
+networks:
+  frontend:
+    name: medique-frontend
+  backend:
+    name: medique-backend
+    internal: true    # PostgreSQL is never reachable from outside Docker
+
+volumes:
+  postgres-data:
+    name: medique-postgres-data

@@ -1,0 +1,48 @@
+# =============================================================================
+# medique-hostedui — Development Docker Compose
+# =============================================================================
+# Usage:
+#   cp .env.example .env        # then fill in your values
+#   docker compose up -d
+#
+# Stack: Open WebUI only (SQLite + built-in ChromaDB).
+# No PostgreSQL or Nginx required for local development.
+# =============================================================================
+
+services:
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: medique-webui
+    ports:
+      - "${WEBUI_PORT:-3000}:8080"
+    environment:
+      # --- OpenAI Provider ---
+      - OPENAI_API_KEY=${OPENAI_API_KEY:?Set OPENAI_API_KEY in .env}
+      - OPENAI_API_BASE_URL=${OPENAI_API_BASE_URL:-https://api.openai.com/v1}
+      - ENABLE_OPENAI_API=${ENABLE_OPENAI_API:-true}
+      - ENABLE_OLLAMA_API=${ENABLE_OLLAMA_API:-false}
+      # --- Security ---
+      - WEBUI_AUTH=${WEBUI_AUTH:-true}
+      - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY:-dev-only-change-in-prod}
+      - ENABLE_SIGNUP=${ENABLE_SIGNUP:-true}
+      # --- RAG ---
+      - ENABLE_RAG_WEB_SEARCH=false
+      - RAG_EMBEDDING_ENGINE=${RAG_EMBEDDING_ENGINE:-openai}
+      - RAG_EMBEDDING_MODEL=${RAG_EMBEDDING_MODEL:-text-embedding-3-small}
+      - ENABLE_SEARCH_QUERY=false
+      # --- UI ---
+      - WEBUI_NAME=${WEBUI_NAME:-Medique - Tutor Educacional}
+      - DEFAULT_MODELS=${DEFAULT_MODELS:-gpt-4o-mini}
+    volumes:
+      - webui-data:/app/backend/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+volumes:
+  webui-data:
+    name: medique-webui-data
