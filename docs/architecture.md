@@ -94,12 +94,14 @@ Not used in development — Open WebUI is accessed directly on `localhost:3000`.
 
 ```
 1. Admin uploads PDF via Knowledge UI
-2. Open WebUI extracts text from PDF (built-in parser)
+2. Open WebUI extracts text from PDF (built-in parser — NOT OCR)
 3. Text is split into chunks (configurable size and overlap)
 4. Each chunk is embedded via OpenAI text-embedding-3-small
 5. Embeddings stored in vector database (ChromaDB/SQLite in dev, pgvector in prod)
 6. Chunks are searchable immediately
 ```
+
+**Important**: Step 2 is rule-based text extraction, not OCR. Scanned PDFs without a text layer produce no usable text. See [docs/rag-operations.md](rag-operations.md) for PDF preparation guidance.
 
 ## What is configured WHERE
 

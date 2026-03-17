@@ -59,8 +59,14 @@ Full architecture: [docs/architecture.md](docs/architecture.md)
 |----------|---------|
 | [docs/architecture.md](docs/architecture.md) | System design, components, data flow, config mapping |
 | [docs/deployment.md](docs/deployment.md) | Local/prod deployment, OpenAI setup, verification checklist |
-| [docs/operations.md](docs/operations.md) | Backup, restore, updates, health checks, secret rotation |
+| [docs/runbook.md](docs/runbook.md) | Copy-paste operational runbook: startup, shutdown, backup, restore, update, troubleshooting |
+| [docs/operations.md](docs/operations.md) | Operations overview with quick reference and schedules |
 | [docs/security.md](docs/security.md) | Threat model, auth, network isolation, key rotation, env management |
+| [docs/rag-operations.md](docs/rag-operations.md) | PDF preparation, upload, Knowledge collections, retrieval tuning, grounding |
+| [docs/checklists.md](docs/checklists.md) | Ingestion, retrieval quality, hallucination debugging, re-upload, pre-launch |
+| [docs/grounding-strategy.md](docs/grounding-strategy.md) | Grounding enforcement, enforceable vs policy controls, admin lockdown checklist |
+| [docs/integration.md](docs/integration.md) | Course website integration: iframe, auth, per-course segregation, staged rollout |
+| [docs/bot-behavior/](docs/bot-behavior/) | System prompt, refusal rules, style guide, examples, test matrix |
 
 ## Repository Structure
 

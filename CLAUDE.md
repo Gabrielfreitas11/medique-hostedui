@@ -34,10 +34,11 @@ docker-compose.yml          ← dev stack (single container, SQLite)
 docker-compose.prod.yml     ← prod override (adds Nginx + PostgreSQL)
 .env.example                ← all env vars with docs; copy to .env
 reverse-proxy/              ← Nginx config + SSL cert directory
-config/system-prompts/      ← system prompt template (paste into Admin UI)
+config/system-prompts/      ← deployable system prompt (paste into Admin UI)
+docs/bot-behavior/          ← behavior spec, refusal rules, style guide, examples, test matrix
 scripts/                    ← setup.sh, backup.sh, rotate-secrets.sh
-knowledge/                  ← README only; PDFs managed via Open WebUI UI
-docs/                       ← architecture, deployment, operations, security
+knowledge/                  ← README quick-ref; PDFs managed via Open WebUI UI
+docs/                       ← architecture, deployment, runbook, operations, security, rag-operations, grounding, checklists, integration
 ```
 
 ## How Docker Compose works here
@@ -62,9 +63,12 @@ This is the most common source of confusion. Two configuration planes exist:
 **Open WebUI Admin UI** — set after container is running:
 - System prompt, Knowledge collections, model↔collection binding, RAG chunk settings, temperature, user accounts, web search toggle, tools
 
-The system prompt text lives in `config/system-prompts/medical-tutor.md` as a template,
+The system prompt text lives in `config/system-prompts/medical-tutor.md` as the deployable artifact,
 but must be **manually pasted** into Admin → Settings → General → System Prompt.
 There is no automated way to inject it.
+
+Bot behavior specification (refusal rules, style guide, examples, test matrix) lives in `docs/bot-behavior/`.
+The system prompt implements the specification. If the spec changes, update the prompt and re-paste.
 
 ## Conventions
 
@@ -78,14 +82,25 @@ There is no automated way to inject it.
 
 **Phase 1 — Repository structure and local dev setup** (complete — 2026-03-16)
 **Phase 2 — OpenAI provider setup, secrets management, verification** (complete — 2026-03-16)
+**Phase 3 — Bot behavior specification, system prompt, test matrix** (complete — 2026-03-16)
+**Phase 4 — RAG operations, PDF ingestion, retrieval quality, checklists** (complete — 2026-03-16)
+**Phase 5 — Grounding enforcement strategy, lockdown checklist, acceptance tests** (complete — 2026-03-16)
+**Phase 6 — Operational runbook, backup/restore, update/rollback, troubleshooting** (complete — 2026-03-16)
+**Phase 7 — Course website integration strategy, auth, per-course segregation, rollout plan** (complete — 2026-03-16)
 
-Next: set `OPENAI_API_KEY` in `.env`, run `docker compose up -d`, follow verification checklist in `docs/deployment.md`.
+Next: set `OPENAI_API_KEY` in `.env`, run `docker compose up -d`, paste system prompt, upload PDFs, run checklists from `docs/checklists.md`, then run grounding tests from `docs/grounding-strategy.md`.
+
+For day-to-day operations: `docs/runbook.md` has every procedure copy-paste ready.
+For course website integration: `docs/integration.md` has the full strategy and staged rollout.
 
 ## Open questions (do not block current phase)
 
-- SSO/OAuth integration with course platform (Hotmart, Kiwify) — future
-- Embed via iframe vs. direct link for students — future
-- Cross-encoder reranking for better RAG retrieval — future
-- One Knowledge collection per course vs. unified — future
-- Chat log retention policy for LGPD compliance — future
+- SSO/OAuth integration with course platform (Hotmart, Kiwify) — future; integration paths documented in `docs/integration.md`
+- Cross-encoder reranking for better RAG retrieval — future (evaluate if top-k tuning is insufficient)
+- Chat log retention policy for LGPD compliance — future; privacy considerations documented in `docs/integration.md`
 - Open WebUI image version pinning for production — decide before prod deploy
+
+## Resolved questions
+
+- Embed via iframe vs. direct link → both documented in `docs/integration.md`; iframe recommended, direct link for MVP
+- Multi-course collection strategy → one collection per course, one model config per collection; documented in `docs/integration.md`

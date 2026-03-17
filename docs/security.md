@@ -234,6 +234,8 @@ GPT-4o has extensive medical knowledge from training. The system prompt instruct
 
 **Mitigations**: low temperature (0.3), strong prompt wording, periodic chat log review, visible disclaimer.
 
+For a full analysis of what is technically enforceable vs. policy-only, see [docs/grounding-strategy.md](grounding-strategy.md).
+
 ## Content Safety
 
 ### Disclaimer
