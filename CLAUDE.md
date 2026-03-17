@@ -88,10 +88,16 @@ The system prompt implements the specification. If the spec changes, update the 
 **Phase 6 — Operational runbook, backup/restore, update/rollback, troubleshooting** (complete — 2026-03-16)
 **Phase 7 — Course website integration strategy, auth, per-course segregation, rollout plan** (complete — 2026-03-16)
 
-Next: set `OPENAI_API_KEY` in `.env`, run `docker compose up -d`, paste system prompt, upload PDFs, run checklists from `docs/checklists.md`, then run grounding tests from `docs/grounding-strategy.md`.
+All documentation phases are complete. The project is ready for deployment.
 
-For day-to-day operations: `docs/runbook.md` has every procedure copy-paste ready.
-For course website integration: `docs/integration.md` has the full strategy and staged rollout.
+**To deploy**:
+1. Set `OPENAI_API_KEY` in `.env` → `docker compose up -d`
+2. Complete Admin UI setup (see `docs/deployment.md`)
+3. Upload PDFs, run checklists (`docs/checklists.md`)
+4. Run grounding tests (`docs/grounding-strategy.md`)
+5. Follow staged rollout (`docs/integration.md`)
+
+**Reference**: `docs/runbook.md` for operations, `docs/integration.md` for course website integration.
 
 ## Open questions (do not block current phase)
 

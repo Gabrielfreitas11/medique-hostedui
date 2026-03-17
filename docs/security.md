@@ -227,7 +227,7 @@ The bot's restriction to course content relies on four independent layers. No si
 
 ### Known limitation: parametric leakage
 
-GPT-4o has extensive medical knowledge from training. The system prompt instructs it to answer only from provided context, but:
+GPT-4o-mini (and GPT-4o) have extensive medical knowledge from training. The system prompt instructs the model to answer only from provided context, but:
 - This is a behavioral instruction, not a hard constraint
 - Adversarial prompting can sometimes bypass it
 - The model may "fill in" answers when retrieved context is partially relevant
@@ -257,8 +257,8 @@ Periodically review chat logs (Admin → Chats or Admin → Users → user → C
 ### No PII collection
 
 The system prompt discourages students from sharing personal health info. However, if they do, it's stored in the chat database. Consider:
-- A data retention policy (delete chats older than X days) — Phase 2+
-- LGPD compliance review if operating in Brazil — Phase 2+
+- A data retention policy (delete chats older than X days) — see `docs/integration.md` for LGPD notes
+- LGPD compliance review if operating in Brazil — see `docs/integration.md`
 
 ## Update Strategy
 

@@ -293,6 +293,8 @@ Run these after any change that could affect grounding behavior.
 
 ### Minimum regression set (quick — 10 tests)
 
+These are grounding-focused tests. For the broader behavioral minimum regression set (covering tone, attribution, etc.), see `docs/bot-behavior/test-matrix.md`.
+
 When time is limited, run these 10 tests as a minimum:
 
 | Test | Why it's in the minimum set |
@@ -320,7 +322,7 @@ These are honest, documented limitations of the current architecture. They are n
 
 | Limitation | Why it exists | Impact | Mitigation |
 |-----------|--------------|--------|------------|
-| Parametric knowledge leakage | GPT-4o has extensive medical training data; prompt instructions cannot erase it | Model occasionally answers from training data when PDF context is absent or thin | Low temperature (0.3) + strong prompt wording + periodic chat log review |
+| Parametric knowledge leakage | GPT-4o-mini and GPT-4o have extensive medical training data; prompt instructions cannot erase it | Model occasionally answers from training data when PDF context is absent or thin | Low temperature (0.3) + strong prompt wording + periodic chat log review |
 | Prompt injection bypass | System prompt is a behavioral instruction, not a sandbox | Sophisticated adversarial prompting may bypass refusal rules | Multi-layer defense (technical + policy); chat log review for anomalies |
 | Incomplete PDF extraction | Open WebUI uses rule-based extraction, not OCR | Scanned PDFs or complex layouts may produce poor text | Pre-process with ocrmypdf; verify extraction quality before relying on content |
 | Chunk boundary information loss | Fixed-size chunking may split critical information | Answer quality degrades for content that spans chunk boundaries | 200-token overlap mitigates; increase chunk size if specific content is affected |

@@ -161,9 +161,9 @@ Collection: "Turma 2026.2 — Cardiologia" (updated materials)
 
 Use when course materials change between cohorts and you need to keep old cohorts' content stable while updating for new ones.
 
-### Recommendation for Phase 1
+### Recommendation
 
-Start with **Option A** (one collection per course). Migrate to Option C only if cohort-specific content becomes necessary.
+Start with **Option A** (one collection per course). Migrate to Option C only if cohort-specific content becomes necessary. See `docs/integration.md` for the full multi-course strategy.
 
 ---
 
@@ -438,7 +438,7 @@ Ask the same question again. Some Open WebUI versions show source documents in t
 
 ## Multi-Course / Multi-Cohort Strategy
 
-### Current setup (Phase 1–2)
+### Current setup
 
 Single model (`gpt-4o-mini`) with one or more Knowledge collections.
 
