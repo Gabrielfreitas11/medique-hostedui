@@ -26,7 +26,7 @@ services:
       # --- Security (hardened for production) ---
       - WEBUI_AUTH=true
       - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY:?Set WEBUI_SECRET_KEY in .env}
-      - ENABLE_SIGNUP=${ENABLE_SIGNUP:-false}
+      - ENABLE_SIGNUP=true
       # --- RAG ---
       - ENABLE_RAG_WEB_SEARCH=false
       - RAG_EMBEDDING_ENGINE=${RAG_EMBEDDING_ENGINE:-openai}
