@@ -35,6 +35,8 @@ services:
       - DEFAULT_MODELS=${DEFAULT_MODELS:-gpt-4o-mini}
     volumes:
       - webui-data:/app/backend/data
+      - ./assets/logo.png:/app/backend/open_webui/static/logo.png:ro
+      - ./assets/logo.png:/app/build/static/logo.png:ro
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
