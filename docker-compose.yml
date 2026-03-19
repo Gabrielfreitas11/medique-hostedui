@@ -41,6 +41,8 @@ services:
       - ./assets/favicon.png:/app/build/static/favicon.png:ro
       - ./assets/favicon-dark.png:/app/backend/open_webui/static/favicon-dark.png:ro
       - ./assets/favicon-dark.png:/app/build/static/favicon-dark.png:ro
+      - ./assets/favicon.ico:/app/backend/open_webui/static/favicon.ico:ro
+      - ./assets/favicon.ico:/app/build/static/favicon.ico:ro
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
